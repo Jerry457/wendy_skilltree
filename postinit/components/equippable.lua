@@ -4,10 +4,12 @@ local Equippable = require("components/equippable")
 
 local _GetWalkSpeedMult = Equippable.GetWalkSpeedMult
 function Equippable:GetWalkSpeedMult(...)
+    local speed = _GetWalkSpeedMult(self, ...)
+
     local owner = self.inst.components.inventoryitem and self.inst.components.inventoryitem.owner
-    if self.isequipped and owner and owner:HasTag("vigorbuff") then
-        return 1
+    if speed < 1 and self.isequipped and owner and owner:HasTag("vigorbuff") then
+        speed = math.min(1, speed)
     end
 
-    return  _GetWalkSpeedMult(self, ...)
+    return speed
 end
