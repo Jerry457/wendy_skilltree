@@ -11,7 +11,9 @@ local stategraphs_files = {
 }
 
 local prefab_files = {
+    "abigail",
     "elixir_container",
+    "ghostly_elixirs",
     "petals",
     "sisturn",
 }
