@@ -21,5 +21,6 @@ AddPrefabPostInit("nightlight", function(inst)
         return
     end
 
+    inst:AddComponent("ghostgestalter")
     inst.components.ghostgestalter.domutatefn = DoMutate
 end)
