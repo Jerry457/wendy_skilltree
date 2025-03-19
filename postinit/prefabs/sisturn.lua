@@ -1,5 +1,4 @@
 local AddPrefabPostInit = AddPrefabPostInit
-local AddGamePostInit = AddGamePostInit
 GLOBAL.setfenv(1, GLOBAL)
 
 local UpvalueUtil = require("utils/upvalue_util")
@@ -45,8 +44,50 @@ local function OnTimerDone(inst, data)
     OnItemChange(inst)
 end
 
-local function getsisturnfeel(inst)
-    return "BLOSSOM"
+local function DoShadowBurstBuff(abigail)
+    local x,y,z = abigail.Transform:GetWorldPosition()
+    SpawnPrefab("abigail_attack_shadow_fx").Transform:SetPosition(x,y,z)
+    local fx = SpawnPrefab("abigail_shadow_buff_fx")
+    abigail:AddChild(fx)
+    abigail:AddDebuff("abigail_murder_buff", "abigail_murder_buff")
+end
+
+local function DoMutate(inst, doer)
+    local ghostlybond = doer.components.ghostlybond
+    if ghostlybond == nil or ghostlybond.ghost == nil or not ghostlybond.summoned then
+        return false, "NOGHOST"
+    end
+
+    if not TheWorld.state.isnight or not TheWorld.state.iscavenight then
+        return false, "NOTNIGHT"
+    end
+
+    if inst:getsisturnfeel() == "EVIL" then
+        if TheWorld.state.isnightmarewild or TheWorld.state.isnewmoon or
+            (not TheWorld.state.isfullmoon and not TheWorld.state.iswaxingmoon) then
+                if not ghostlybond.ghost:HasDebuff("abigail_murder_buff") then
+                    DoShadowBurstBuff(ghostlybond.ghost)
+                    return true
+                else
+                    return false, "MUTATED"
+                end
+        else
+            return false, "NONEWMOON"
+        end
+    elseif inst:getsisturnfeel() == "BLOSSOM" then
+        if TheWorld.state.isfullmoon or (not TheWorld.state.isnewmoon and TheWorld.state.iswaxingmoon) then
+            if not ghostlybond.ghost:HasTag("gestalt") then
+                ghostlybond.ghost:ChangeToGestalt(true)
+                return true
+            else
+                return false, "MUTATED"
+            end
+        else
+            return false, "NOFULLMOON"
+        end
+    else
+        return false, "NOFEEL"
+    end
 end
 
 AddPrefabPostInit("sisturn", function(inst)
@@ -54,12 +95,16 @@ AddPrefabPostInit("sisturn", function(inst)
         return
     end
 
-    inst.getsisturnfeel = getsisturnfeel
-    UpvalueUtil.SetUpvalue(inst.components.inspectable.getstatus, getsisturnfeel, "getsisturnfeel")
+    inst:AddComponent("ghostgestalter")
+    inst.components.ghostgestalter.forcerightclickaction = true
+    inst.components.ghostgestalter.domutatefn = DoMutate
 
     if not inst.components.timer then
         inst:AddComponent("timer")
     end
+
+    -- inst.getsisturnfeel = getsisturnfeel
+    -- UpvalueUtil.SetUpvalue(inst.components.inspectable.getstatus, getsisturnfeel, "getsisturnfeel")
 
     inst:ListenForEvent("itemget", OnItemGet)
     inst:ListenForEvent("itemlose", OnItemLose)

@@ -43,7 +43,7 @@ AddPrefabPostInit("ghostlyelixir_revive", function(inst)
         SetbonusHaelath(target, 0)
     end
 
-    inst.potion_tunings.DURATION = 99999999999
+    inst.potion_tunings.DURATION = 1.79769313486231e+308
 end)
 
 for type, enemy in pairs({lunar = "shadow", shadow = "lunar"}) do

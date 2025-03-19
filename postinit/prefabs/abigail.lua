@@ -5,6 +5,7 @@ local UpvalueUtil = require("utils/upvalue_util")
 
 local function SetToGestalt(inst)
     inst:AddTag("gestalt")
+    inst:AddTag("crazy")
     inst.components.aura:Enable(false)
     inst.AnimState:SetBuild("ghost_abigail_gestalt_build")
 
@@ -22,6 +23,7 @@ end
 
 local function SetToNormal(inst)
     inst:RemoveTag("gestalt")
+    inst:RemoveTag("crazy")
     inst.components.aura:Enable(true)
     inst.AnimState:SetBuild("ghost_abigail_build")
 
@@ -42,9 +44,9 @@ local function ApplyDebuff(inst, data)
     if target ~= nil then
         local buff = "abigail_vex_debuff"
 
-        -- if inst:HasDebuff("abigail_murder_buff") then  -- 原来暗影药剂效果
-        --     buff = "abigail_vex_shadow_debuff"
-        -- end
+        if inst:HasDebuff("abigail_murder_buff") then  -- 原来暗影药剂效果
+            buff = "abigail_vex_shadow_debuff"
+        end
 
         local olddebuff = target:GetDebuff("abigail_vex_debuff")
         if olddebuff and olddebuff.prefab ~= buff then
@@ -70,13 +72,12 @@ AddPrefabPostInit("abigail", function(inst)
     inst.SetToNormal = SetToNormal
     inst.SetToGestalt = SetToGestalt
 
+    inst.DoShadowBurstBuff = function() end
+
     UpvalueUtil.SetUpvalue(inst.OnLoad, SetToGestalt, "SetToGestalt")
     UpvalueUtil.SetUpvalue(inst.LinkToPlayer, ApplyDebuff, "ApplyDebuff")
 
-    inst.UpdateBonusHealth = function()
-
-    end
-    local OnHealthChanged = inst:GetEventCallbacks("pre_health_setval")
-    print("OnHealthChanged", OnHealthChanged)
+    inst.UpdateBonusHealth = function() end
+    local OnHealthChanged = inst:GetEventCallbacks("pre_health_setval", inst, "scripts/prefabs/abigail.lua")
     inst:RemoveEventCallback("pre_health_setval", OnHealthChanged)
 end)

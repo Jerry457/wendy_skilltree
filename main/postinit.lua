@@ -7,15 +7,18 @@ local component_files = {
 }
 
 local stategraphs_files = {
-
 }
 
 local prefab_files = {
+    "abigail_murder_buff",
     "abigail",
     "elixir_container",
     "ghostly_elixirs",
+    "moondial",
+    "nightlight",
     "petals",
     "sisturn",
+    "wendy",
 }
 
 modimport("postinit/entityscript")

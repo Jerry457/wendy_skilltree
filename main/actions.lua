@@ -8,13 +8,22 @@ local UpvalueUtil = require("utils/upvalue_util")
 
 if not rawget(_G, "HotReloading") then
     local ACTIONS = {
-        SPAEN_SMALL_GHOST = Action({rmb = true}),
+        SPAEN_SMALL_GHOST = Action({priority = 1, rmb = true}),
+        TRANSFORM_ABIGAIL = Action({priority = 1, rmb = true}),
     }
 
     for name, action in pairs(ACTIONS) do
         action.id = name
         action.str = STRINGS.ACTIONS[name] or name
         AddAction(action)
+    end
+
+    local actionhandlers = {
+        ActionHandler(ACTIONS.SPAEN_SMALL_GHOST, "dolongaction"),
+    }
+    for _, actionhandler in ipairs(actionhandlers) do
+        AddStategraphActionHandler("wilson", actionhandler)
+        AddStategraphActionHandler("wilson_client", actionhandler)
     end
 end
 
@@ -41,10 +50,16 @@ AddComponentAction("SCENE", "gravediggable", function(inst, doer, actions, right
     end
 end)
 
-local actionhandlers = {
-    ActionHandler(ACTIONS.SPAEN_SMALL_GHOST, "dolongaction"),
-}
-for _, actionhandler in ipairs(actionhandlers) do
-    AddStategraphActionHandler("wilson", actionhandler)
-    AddStategraphActionHandler("wilson_client", actionhandler)
+local COMPONENT_ACTIONS = UpvalueUtil.GetUpvalue(EntityScript.CollectActions, "COMPONENT_ACTIONS")
+local SCENE = COMPONENT_ACTIONS.SCENE
+local USEITEM = COMPONENT_ACTIONS.USEITEM
+local POINT = COMPONENT_ACTIONS.POINT
+local EQUIPPED = COMPONENT_ACTIONS.EQUIPPED
+local INVENTORY = COMPONENT_ACTIONS.INVENTORY
+
+SCENE.ghostgestalter = function(inst, doer, actions, right)
+    local skilltreeupdater = (inst and doer.components.skilltreeupdater) or nil
+    if skilltreeupdater and (skilltreeupdater:IsActivated("wendy_lunar_3") or skilltreeupdater:IsActivated("wendy_shadow_3")) and (right) then
+        table.insert(actions, ACTIONS.MUTATE)
+    end
 end

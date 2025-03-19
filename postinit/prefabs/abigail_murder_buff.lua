@@ -1,0 +1,25 @@
+local AddPrefabPostInit = AddPrefabPostInit
+GLOBAL.setfenv(1, GLOBAL)
+
+local UpvalueUtil = require("utils/upvalue_util")
+
+
+AddPrefabPostInit("abigail_murder_buff", function(inst)
+    if not TheWorld.ismastersim then
+        return
+    end
+
+    inst.persists = true
+
+    inst.murder_buff_OnExtended = function() end
+    inst.components.debuff:SetExtendedFn(inst.murder_buff_OnExtended)
+
+    local _onattachedfn = inst.components.debuff.onattachedfn
+    UpvalueUtil.SetUpvalue(_onattachedfn, inst.murder_buff_OnExtended, "murder_buff_OnExtended")
+
+    inst.components.debuff.onattachedfn = function(inst, target, ...)
+        _onattachedfn(inst, target, ...)
+        local OnDeath = inst:GetEventCallbacks("death", target, "scripts/prefabs/abigail.lua")
+        inst:RemoveEventCallback("death", OnDeath, target)
+    end
+end)
