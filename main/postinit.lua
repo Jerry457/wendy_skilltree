@@ -3,7 +3,7 @@ local widget_files = {
 }
 
 local component_files = {
-
+    "equippable"
 }
 
 local stategraphs_files = {
@@ -13,7 +13,9 @@ local prefab_files = {
     "abigail_murder_buff",
     "abigail",
     "elixir_container",
-    "ghostly_elixirs",
+    "ghostlyelixir_speed",
+    "ghostlyelixir_revive",
+    "ghostlyelixir_shadow_lunar",
     "moondial",
     "nightlight",
     "petals",
