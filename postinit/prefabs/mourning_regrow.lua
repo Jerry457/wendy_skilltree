@@ -1,5 +1,8 @@
 local AddPrefabPostInit = AddPrefabPostInit
 GLOBAL.setfenv(1, GLOBAL)
+
+local UpvalueUtil = require("utils/upvalue_util")
+
 local petals = {
     "petals",
     "petals_evil",
@@ -57,3 +60,90 @@ AddPrefabPostInit("moon_tree_blossom", function(inst)
     inst:AddComponent("mourningregrow")
     inst.components.mourningregrow:SetOnRegrowFn(OnRegrow("moonbutterfly"))
 end)
+
+AddPrefabPostInit("glommerflower", function(inst)
+    if not TheWorld.ismastersim then
+        return
+    end
+
+    inst:AddComponent("mourningregrow")
+    inst.components.mourningregrow:SetOnRegrowFn(function(inst, doer)
+        if not inst:HasTag("glommerflower") then
+            return false, "Glommerflowers death"
+        end
+        return false, "Glommerflowers"
+    end)
+end)
+
+AddPrefabPostInit("abigail_flower", function(inst)
+    if not TheWorld.ismastersim then
+        return
+    end
+
+    inst:AddComponent("mourningregrow")
+    inst.components.mourningregrow:SetOnRegrowFn(function(inst, doer)
+        return false, "abigail_flower"
+    end)
+end)
+
+AddPrefabPostInit("chester_eyebone", function(inst)
+    if not TheWorld.ismastersim then
+        return
+    end
+
+    local RespawnChester = UpvalueUtil.GetUpvalue(inst.components.inventoryitem.onputininventoryfn, "FixChester.StartRespawn.RespawnChester")
+
+    inst:AddComponent("mourningregrow")
+    inst.components.mourningregrow:SetOnRegrowFn(function(inst, doer)
+        if not inst.isOpenEye then
+            RespawnChester(inst)
+            if doer.components.talker then
+                doer.components.talker:Say("chester_eyebone")
+            end
+            return true
+        end
+        return false, "chester_eyebone"
+    end)
+end)
+
+AddPrefabPostInit("hutch_fishbowl", function(inst)
+    if not TheWorld.ismastersim then
+        return
+    end
+
+    local RespawnHutch = UpvalueUtil.GetUpvalue(inst.components.inventoryitem.onputininventoryfn, "FixHutch.StartRespawn.RespawnHutch")
+
+    inst:AddComponent("mourningregrow")
+    inst.components.mourningregrow:SetOnRegrowFn(function(inst, doer)
+        if not inst.isFishAlive then
+            RespawnHutch(inst)
+            if doer.components.talker then
+                doer.components.talker:Say("hutch_fishbowl")
+            end
+            return true
+        end
+        return false, "hutch_fishbowl"
+    end)
+end)
+
+AddPrefabPostInit("hutch_fishbowl", function(inst)
+    if not TheWorld.ismastersim then
+        return
+    end
+
+    local RespawnHutch = UpvalueUtil.GetUpvalue(inst.components.inventoryitem.onputininventoryfn, "FixHutch.StartRespawn.RespawnHutch")
+
+    inst:AddComponent("mourningregrow")
+    inst.components.mourningregrow:SetOnRegrowFn(function(inst, doer)
+        if not inst.isFishAlive then
+            RespawnHutch(inst)
+            if doer.components.talker then
+                doer.components.talker:Say("hutch_fishbowl")
+            end
+            return true
+        end
+        return false, "hutch_fishbowl"
+    end)
+end)
+
+inst:RemoveTag("fruitflyfruit")

@@ -1,6 +1,6 @@
 local assets =
 {
-    -- Asset("ANIM", "anim/dark_butterfly.zip"),
+    Asset("ANIM", "anim/dark_butterfly.zip"),
     Asset("IMAGE", "images/dark_butterfly.tex"),
     Asset("ATLAS", "images/dark_butterfly.xml"),
 }
@@ -8,6 +8,10 @@ local assets =
 RegisterInventoryItemAtlas(resolvefilepath("images/dark_butterfly.xml"), "dark_butterfly.tex")
 RegisterInventoryItemAtlas(resolvefilepath("images/dark_butterfly.xml"), hash("dark_butterfly.tex"))
 
+SetSharedLootTable("dark_butterfly",
+{
+    {"nightmarefuel", 0.5},
+})
 
 local function OnDeploy(inst, pt, deployer)
     local flower = SpawnPrefab(math.random() < 0.9 and "flower_rose" or "flower_evil")
@@ -47,9 +51,10 @@ local function fn()
 
     inst.Transform:SetTwoFaced()
 
-    inst.AnimState:SetBuild("butterfly_basic")
-    inst.AnimState:SetBank("butterfly")
-    inst.AnimState:PlayAnimation("idle")
+    inst.AnimState:SetBuild("dark_butterfly")
+    inst.AnimState:SetBank("dark_butterfly")
+    inst.AnimState:PlayAnimation("build")
+    inst.AnimState:PushAnimation("idle_loop", true)
     inst.AnimState:SetRayTestOnBB(true)
 
     inst.DynamicShadow:SetSize(.8, .5)
@@ -61,7 +66,6 @@ local function fn()
     if not TheWorld.ismastersim then
         return inst
     end
-
 
     inst:AddComponent("inspectable")
 
@@ -76,7 +80,7 @@ local function fn()
     inst:AddComponent("stackable")
 
     inst:AddComponent("lootdropper")
-    inst.components.lootdropper:AddRandomLoot("nightmarefuel", 0.5)
+    inst.components.lootdropper:SetChanceLootTable("dark_butterfly")
 
     inst:AddComponent("deployable")
     inst.components.deployable.ondeploy = OnDeploy
