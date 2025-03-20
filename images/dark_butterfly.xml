@@ -1,0 +1,6 @@
+<Atlas>
+    <Texture filename="dark_butterfly.tex" />
+    <Elements>
+        <Element name="dark_butterfly.tex" u1="0.0078125" v1="0.0234375" u2="0.9765625" v2="0.9921875" />
+    </Elements>
+</Atlas>

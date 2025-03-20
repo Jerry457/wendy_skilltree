@@ -49,6 +49,8 @@ ACTIONS.MOURNING_REGROW.fn = function(act)
             act.invobject.components.stackable:Get():Remove()
         end
         return success, message
+    else
+        return false, "Invalid target"
     end
 end
 
@@ -63,7 +65,7 @@ end)
 
 AddComponentAction("USEITEM", "mourningflower", function(inst, doer, target, actions, right)
     local skilltreeupdater = (doer and doer.components.skilltreeupdater) or nil
-    if target and target:HasTag("mourningregrow") and skilltreeupdater and skilltreeupdater:IsActivated("wendy_ghostflower_butterfly") then
+    if skilltreeupdater and skilltreeupdater:IsActivated("wendy_ghostflower_butterfly") then
         table.insert(actions, ACTIONS.MOURNING_REGROW)
     end
 end)

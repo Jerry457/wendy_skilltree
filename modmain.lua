@@ -1,6 +1,7 @@
 Assets = {}
 
 PrefabFiles = {
+    "dark_butterfly",
     "mourningflower",
 }
 

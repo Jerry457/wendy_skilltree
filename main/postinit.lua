@@ -14,6 +14,7 @@ local prefab_files = {
     "abigail_murder_buff",
     "abigail",
     "elixir_container",
+    "farm_plant_randomseed",
     "ghostcommand_defs",
     "ghostlyelixirs",
     "moondial",
@@ -22,6 +23,10 @@ local prefab_files = {
     "petals",
     "sisturn",
     "wendy",
+}
+
+local brain_files = {
+    "abigailbrain"
 }
 
 modimport("postinit/entityscript")
@@ -41,4 +46,8 @@ end
 
 for i, file_name in ipairs(prefab_files) do
     modimport("postinit/prefabs/" .. file_name)
+end
+
+for i, file_name in ipairs(brain_files) do
+    modimport("postinit/brains/" .. file_name)
 end
