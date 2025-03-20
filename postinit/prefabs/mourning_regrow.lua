@@ -61,6 +61,22 @@ AddPrefabPostInit("moon_tree_blossom", function(inst)
     inst.components.mourningregrow:SetOnRegrowFn(OnRegrow("moonbutterfly"))
 end)
 
+AddPrefabPostInit("fruitflyfruit", function(inst)
+    if not TheWorld.ismastersim then
+        return
+    end
+
+    inst:AddComponent("mourningregrow")
+    inst.components.mourningregrow:SetOnRegrowFn(function(inst, doer)
+        if not inst:HasTag("fruitflyfruit") then
+            return false, "fruitflyfruit"
+        elseif TheSim:FindFirstEntityWithTag("friendlyfruitfly") then
+            return false, "alady cxczcxzczxc"
+        end
+        return OnRegrow("fruitflyfruit")
+    end)
+end)
+
 AddPrefabPostInit("glommerflower", function(inst)
     if not TheWorld.ismastersim then
         return
@@ -74,6 +90,8 @@ AddPrefabPostInit("glommerflower", function(inst)
         return false, "Glommerflowers"
     end)
 end)
+
+
 
 AddPrefabPostInit("abigail_flower", function(inst)
     if not TheWorld.ismastersim then
@@ -145,5 +163,3 @@ AddPrefabPostInit("hutch_fishbowl", function(inst)
         return false, "hutch_fishbowl"
     end)
 end)
-
-inst:RemoveTag("fruitflyfruit")
