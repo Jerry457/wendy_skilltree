@@ -44,7 +44,11 @@ end
 
 ACTIONS.MOURNING_REGROW.fn = function(act)
     if act.target and act.target.components.mourningregrow then
-        return act.target.components.mourningregrow:Regrow(act.doer)
+        local success, message = act.target.components.mourningregrow:Regrow(act.doer)
+        if success then
+            act.invobject.components.stackable:Get():Remove()
+        end
+        return success, message
     end
 end
 

@@ -47,6 +47,9 @@ local function fn()
 
     inst:AddComponent("mourningflower")
 
+    inst:AddComponent("stackable")
+	inst.components.stackable.maxsize = TUNING.STACK_SIZE_SMALLITEM
+
     MakeSmallBurnable(inst, TUNING.SMALL_BURNTIME)
     inst.components.burnable.fxdata = {}
     inst.components.burnable:AddBurnFX("campfirefire", Vector3(0, 0, 0))
