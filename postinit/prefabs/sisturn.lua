@@ -57,8 +57,8 @@ local function DoMutate(inst, doer)
     if inst:getsisturnfeel() == "EVIL" then
         if TheWorld.state.isnightmarewild or TheWorld.state.isnewmoon or
             (not TheWorld.state.isfullmoon and not TheWorld.state.iswaxingmoon) then
-                if not ghostlybond:HasTag("shadow_abigail") then
-                    ghostlybond:SetToShadow()
+                if not ghostlybond.ghost:HasTag("shadow_abigail") then
+                    ghostlybond.ghost:SetToShadow()
                     return true
                 else
                     return false, "MUTATED"
