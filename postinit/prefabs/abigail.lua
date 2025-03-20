@@ -93,7 +93,9 @@ AddPrefabPostInit("abigail", function(inst)
     UpvalueUtil.SetUpvalue(inst.OnLoad, SetToGestalt, "SetToGestalt")
     UpvalueUtil.SetUpvalue(inst.LinkToPlayer, ApplyDebuff, "ApplyDebuff")
 
-    inst.UpdateBonusHealth = function() end
+    inst.UpdateBonusHealth = function(inst, newbonus)
+        inst.bonus_max_health = newbonus
+    end
     local OnHealthChanged = inst:GetEventCallbacks("pre_health_setval", inst, "scripts/prefabs/abigail.lua")
     inst:RemoveEventCallback("pre_health_setval", OnHealthChanged)
 end)
