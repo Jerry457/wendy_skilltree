@@ -16,6 +16,8 @@ AddPrefabPostInit("wendy", function(inst)
         return
     end
 
+    local checkforshadowsacrifice = inst:GetEventCallbacks("murdered", inst, "scripts/prefabs/wendy.lua")
+    inst:RemoveEventCallback("murdered", checkforshadowsacrifice)
 
     inst:ListenForEvent("onattackother", ApplyDebuff)
 end)

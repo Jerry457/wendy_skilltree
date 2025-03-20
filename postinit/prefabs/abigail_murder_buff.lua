@@ -3,7 +3,6 @@ GLOBAL.setfenv(1, GLOBAL)
 
 local UpvalueUtil = require("utils/upvalue_util")
 
-
 AddPrefabPostInit("abigail_murder_buff", function(inst)
     if not TheWorld.ismastersim then
         return
@@ -21,5 +20,11 @@ AddPrefabPostInit("abigail_murder_buff", function(inst)
         _onattachedfn(inst, target, ...)
         local OnDeath = inst:GetEventCallbacks("death", target, "scripts/prefabs/abigail.lua")
         inst:RemoveEventCallback("death", OnDeath, target)
+    end
+
+    local _ondetachedfn = inst.components.debuff.ondetachedfn
+    inst.components.debuff.ondetachedfn = function(inst, target, ...)
+        inst.decaytimer = inst:DoTaskInTime(0, function() end)
+        _ondetachedfn(inst, target, ...)
     end
 end)
