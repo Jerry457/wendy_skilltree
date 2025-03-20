@@ -2,8 +2,8 @@ local AddPrefabPostInit = AddPrefabPostInit
 GLOBAL.setfenv(1, GLOBAL)
 
 for type, enemy in pairs({lunar = "shadow", shadow = "lunar"}) do
-	local potion_prefab = "ghostlyelixir_" .. type
-	local buff_prefab = potion_prefab .. "_buff"
+    local potion_prefab = "ghostlyelixir_" .. type
+    local buff_prefab = potion_prefab .. "_buff"
 
     AddPrefabPostInit(potion_prefab, function(inst)
         inst:RemoveTag("super_elixir")
