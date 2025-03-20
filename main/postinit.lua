@@ -14,6 +14,7 @@ local prefab_files = {
     "abigail_murder_buff",
     "abigail",
     "elixir_container",
+    "ghostcommand_defs",
     "ghostlyelixir_speed",
     "ghostlyelixir_revive",
     "ghostlyelixir_shadow_lunar",
