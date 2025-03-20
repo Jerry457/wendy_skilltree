@@ -1,6 +1,7 @@
 Assets = {}
 
 PrefabFiles = {
+    "mourningflower",
 }
 
 modimport("main/constants")
