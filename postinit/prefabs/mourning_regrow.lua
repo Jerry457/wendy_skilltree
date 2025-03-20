@@ -68,7 +68,7 @@ AddPrefabPostInit("fruitflyfruit", function(inst)
 
     inst:AddComponent("mourningregrow")
     inst.components.mourningregrow:SetOnRegrowFn(function(inst, doer)
-        if not inst:HasTag("fruitflyfruit") then
+        if inst:HasTag("fruitflyfruit") then
             return false, "fruitflyfruit"
         elseif TheSim:FindFirstEntityWithTag("friendlyfruitfly") then
             return false, "alady cxczcxzczxc"
@@ -90,8 +90,6 @@ AddPrefabPostInit("glommerflower", function(inst)
         return false, "Glommerflowers"
     end)
 end)
-
-
 
 AddPrefabPostInit("abigail_flower", function(inst)
     if not TheWorld.ismastersim then
@@ -121,26 +119,6 @@ AddPrefabPostInit("chester_eyebone", function(inst)
             return true
         end
         return false, "chester_eyebone"
-    end)
-end)
-
-AddPrefabPostInit("hutch_fishbowl", function(inst)
-    if not TheWorld.ismastersim then
-        return
-    end
-
-    local RespawnHutch = UpvalueUtil.GetUpvalue(inst.components.inventoryitem.onputininventoryfn, "FixHutch.StartRespawn.RespawnHutch")
-
-    inst:AddComponent("mourningregrow")
-    inst.components.mourningregrow:SetOnRegrowFn(function(inst, doer)
-        if not inst.isFishAlive then
-            RespawnHutch(inst)
-            if doer.components.talker then
-                doer.components.talker:Say("hutch_fishbowl")
-            end
-            return true
-        end
-        return false, "hutch_fishbowl"
     end)
 end)
 
