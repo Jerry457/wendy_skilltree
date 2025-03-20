@@ -3,7 +3,8 @@ local widget_files = {
 }
 
 local component_files = {
-    "equippable"
+    "equippable",
+    "hauntable",
 }
 
 local stategraphs_files = {
