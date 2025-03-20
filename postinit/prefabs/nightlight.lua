@@ -8,8 +8,8 @@ local function DoMutate(inst, doer)
         return false, "NOGHOST"
     end
 
-    if ghostlybond.ghost:HasDebuff("abigail_murder_buff") then
-        ghostlybond.ghost:RemoveDebuff("abigail_murder_buff")
+    if ghostlybond.ghost:HasTag("shadow_abigail") then
+        ghostlybond.ghost:SetShadowToNormal()
         return true
     else
         return false, "NO_SHADOW"

@@ -44,7 +44,7 @@ local function ApplyDebuff(inst, data)
     if target ~= nil then
         local buff = "abigail_vex_debuff"
 
-        if inst:HasDebuff("abigail_murder_buff") then  -- 原来暗影药剂效果
+        if inst:HasTag("shadow_abigail") then  -- 原来暗影药剂效果
             buff = "abigail_vex_shadow_debuff"
         end
 
@@ -64,6 +64,19 @@ local function ApplyDebuff(inst, data)
     end
 end
 
+local function SetToShadow(inst)
+    local x, y, z = inst.Transform:GetWorldPosition()
+    SpawnPrefab("abigail_attack_shadow_fx").Transform:SetPosition(x,y,z)
+    local fx = SpawnPrefab("abigail_shadow_buff_fx")
+    inst:AddChild(fx)
+    inst.SoundEmitter:PlaySound("meta5/abigail/abigail_nightmare_buff_stinger")
+    inst:AddDebuff("abigail_murder_buff", "abigail_murder_buff")
+end
+
+local function SetShadowToNormal(inst)
+    inst:RemoveDebuff("abigail_murder_buff")
+end
+
 AddPrefabPostInit("abigail", function(inst)
     if not TheWorld.ismastersim then
         return
@@ -71,6 +84,9 @@ AddPrefabPostInit("abigail", function(inst)
 
     inst.SetToNormal = SetToNormal
     inst.SetToGestalt = SetToGestalt
+
+    inst.SetToShadow = SetToShadow
+    inst.SetShadowToNormal = SetShadowToNormal
 
     inst.DoShadowBurstBuff = function() end
 

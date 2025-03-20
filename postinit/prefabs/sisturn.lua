@@ -44,14 +44,6 @@ local function OnTimerDone(inst, data)
     OnItemChange(inst)
 end
 
-local function DoShadowBurstBuff(abigail)
-    local x,y,z = abigail.Transform:GetWorldPosition()
-    SpawnPrefab("abigail_attack_shadow_fx").Transform:SetPosition(x,y,z)
-    local fx = SpawnPrefab("abigail_shadow_buff_fx")
-    abigail:AddChild(fx)
-    abigail:AddDebuff("abigail_murder_buff", "abigail_murder_buff")
-end
-
 local function DoMutate(inst, doer)
     local ghostlybond = doer.components.ghostlybond
     if ghostlybond == nil or ghostlybond.ghost == nil or not ghostlybond.summoned then
@@ -65,8 +57,8 @@ local function DoMutate(inst, doer)
     if inst:getsisturnfeel() == "EVIL" then
         if TheWorld.state.isnightmarewild or TheWorld.state.isnewmoon or
             (not TheWorld.state.isfullmoon and not TheWorld.state.iswaxingmoon) then
-                if not ghostlybond.ghost:HasDebuff("abigail_murder_buff") then
-                    DoShadowBurstBuff(ghostlybond.ghost)
+                if not ghostlybond:HasTag("shadow_abigail") then
+                    ghostlybond:SetToShadow()
                     return true
                 else
                     return false, "MUTATED"
