@@ -9,7 +9,7 @@ local UpvalueUtil = require("utils/upvalue_util")
 if not rawget(_G, "HotReloading") then
     local ACTIONS = {
         SPAEN_SMALL_GHOST = Action({priority = 1, rmb = true}),
-        TRANSFORM_ABIGAIL = Action({priority = 1, rmb = true}),
+        MOURNING_REGROW = Action({priority = 1}),
     }
 
     for name, action in pairs(ACTIONS) do
@@ -20,6 +20,7 @@ if not rawget(_G, "HotReloading") then
 
     local actionhandlers = {
         ActionHandler(ACTIONS.SPAEN_SMALL_GHOST, "dolongaction"),
+        ActionHandler(ACTIONS.MOURNING_REGROW, "give"),
     }
     for _, actionhandler in ipairs(actionhandlers) do
         AddStategraphActionHandler("wilson", actionhandler)
@@ -41,14 +42,28 @@ ACTIONS.SPAEN_SMALL_GHOST.fn = function(act)
     return false
 end
 
+ACTIONS.MOURNING_REGROW.fn = function(act)
+    if act.target and act.target.components.mourningregrow then
+        return act.target.components.mourningregrow:Regrow(act.doer)
+    end
+end
+
+
 AddComponentAction("SCENE", "gravediggable", function(inst, doer, actions, right)
     local skilltreeupdater = (doer and doer.components.skilltreeupdater) or nil
 
     if right and skilltreeupdater and skilltreeupdater:IsActivated("wendy_smallghost_1") then
         table.insert(actions, ACTIONS.SPAEN_SMALL_GHOST)
-        return true
     end
 end)
+
+AddComponentAction("USEITEM", "mourningflower", function(inst, doer, target, actions, right)
+    local skilltreeupdater = (doer and doer.components.skilltreeupdater) or nil
+    if target and target:HasTag("mourningregrow") and skilltreeupdater and skilltreeupdater:IsActivated("wendy_ghostflower_butterfly") then
+        table.insert(actions, ACTIONS.MOURNING_REGROW)
+    end
+end)
+
 
 local COMPONENT_ACTIONS = UpvalueUtil.GetUpvalue(EntityScript.CollectActions, "COMPONENT_ACTIONS")
 local SCENE = COMPONENT_ACTIONS.SCENE

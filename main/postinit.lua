@@ -17,6 +17,7 @@ local prefab_files = {
     "ghostcommand_defs",
     "ghostlyelixirs",
     "moondial",
+    "mourning_regrow",
     "nightlight",
     "petals",
     "sisturn",
