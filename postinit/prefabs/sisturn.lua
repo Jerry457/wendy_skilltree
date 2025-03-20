@@ -15,7 +15,7 @@ local function OnItemChange(inst, data)
     if IsFullOfFlowers(inst) and inst._petal_preserve then
         if inst.components.timer:IsPaused("spawn_ghostflower") then
             inst.components.timer:ResumeTimer("spawn_ghostflower")
-        else
+        elseif not inst.components.timer:TimerExists("spawn_ghostflower") then
             inst.components.timer:StartTimer("spawn_ghostflower", 180)
         end
     else

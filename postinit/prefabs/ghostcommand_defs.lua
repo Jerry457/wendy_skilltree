@@ -20,14 +20,6 @@ local function DoGhostSpell(doer, event, ...)
     return unpack(result)
 end
 UpvalueUtil.SetUpvalue(GhostHauntSpell, DoGhostSpell, "DoGhostSpell")
-
--- haunt_at.onselect = function(inst)
---     local spellbook = inst.components.spellbook
---     if TheWorld.ismastersim then
---         inst.components.aoespell:SetSpellFn(GhostHauntSpell)
---         spellbook:SetSpellFn(nil)
---     end
--- end
 haunt_at.checkcooldown = nil
 
 
@@ -37,5 +29,5 @@ haunt_at.checkcooldown = nil
 --     if spellname == "ghostcommand" then
 --         return true
 --     end
--- 	return _IsInCooldown(self, spellname, ...)
+--     return _IsInCooldown(self, spellname, ...)
 -- end
