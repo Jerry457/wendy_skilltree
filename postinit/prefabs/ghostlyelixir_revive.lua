@@ -34,6 +34,11 @@ AddPrefabPostInit("ghostlyelixir_revive", function(inst)
         return
     end
 
+    inst.potion_tunings.fx = "ghostlyelixir_revive_fx"
+    inst.potion_tunings.dripfx = "ghostlyelixir_revive_dripfx"
+    inst.potion_tunings.fx_player = "ghostlyelixir_player_revive_fx"
+    inst.potion_tunings.dripfx_player = "ghostlyelixir_player_revive_dripfx"
+
     inst.components.ghostlyelixir.doapplyelixerfn = DoApplyReviveElixir
 
     inst.potion_tunings.ONAPPLY = function(inst, target)
