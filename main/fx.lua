@@ -32,7 +32,10 @@ local fxs = {
         build = "player_vial_fx",
         anim = "buff_speed",
         -- sound = "dontstarve/characters/wendy/abigail/buff/speed",
-        fn = FinalOffset3,
+        fn = function(inst)
+            inst.AnimState:OverrideSymbol("fx_speed_02", "abigail_vial_fx", "fx_revive_02")
+            FinalOffset3(inst)
+        end,
     },
     {
         name = "ghostlyelixir_player_revive_dripfx",
@@ -41,6 +44,48 @@ local fxs = {
         anim = "player_elixir_buff_drip",
         fn = function(inst)
             inst.AnimState:OverrideSymbol("fx_swap", "abigail_vial_fx", "fx_revive_02")
+            FinalOffset3(inst)
+        end,
+    },
+    {
+        name = "ghostlyelixir_player_lunar_fx",
+        bank = "player_vial_fx",
+        build = "player_vial_fx",
+        anim = "buff_speed",
+        -- sound = "dontstarve/characters/wendy/abigail/buff/speed",
+        fn = function(inst)
+            inst.AnimState:OverrideSymbol("fx_speed_02", "abigail_vial_fx", "fx_lunar_02")
+            FinalOffset3(inst)
+        end,
+    },
+    {
+        name = "ghostlyelixir_player_lunar_dripfx",
+        bank = "player_elixir_buff_drip",
+        build = "player_vial_fx",
+        anim = "player_elixir_buff_drip",
+        fn = function(inst)
+            inst.AnimState:OverrideSymbol("fx_swap", "abigail_vial_fx", "fx_lunar_02")
+            FinalOffset3(inst)
+        end,
+    },
+    {
+        name = "ghostlyelixir_player_shadow_fx",
+        bank = "player_vial_fx",
+        build = "player_vial_fx",
+        anim = "buff_speed",
+        -- sound = "dontstarve/characters/wendy/abigail/buff/speed",
+        fn = function(inst)
+            inst.AnimState:OverrideSymbol("fx_speed_02", "abigail_vial_fx", "fx_shadow_02")
+            FinalOffset3(inst)
+        end,
+    },
+    {
+        name = "ghostlyelixir_player_shadow_dripfx",
+        bank = "player_elixir_buff_drip",
+        build = "player_vial_fx",
+        anim = "player_elixir_buff_drip",
+        fn = function(inst)
+            inst.AnimState:OverrideSymbol("fx_swap", "abigail_vial_fx", "fx_shadow_02")
             FinalOffset3(inst)
         end,
     },

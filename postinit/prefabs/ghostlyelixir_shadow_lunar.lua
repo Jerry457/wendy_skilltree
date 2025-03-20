@@ -37,5 +37,8 @@ for type, enemy in pairs({lunar = "shadow", shadow = "lunar"}) do
             end
         end
         inst.potion_tunings.ONDETACH_PLAYER = inst.potion_tunings.ONDETACH
+
+        inst.potion_tunings.fx_player = "ghostlyelixir_player_" .. type .. "_fx"
+        inst.potion_tunings.dripfx_player = "ghostlyelixir_player_" .. type .."_dripfx"
     end)
 end
