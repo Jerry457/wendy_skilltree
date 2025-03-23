@@ -7,6 +7,73 @@ local function IsFullOfFlowers(inst)
     return inst.components.container and inst.components.container:IsFull()
 end
 
+local function getsisturnfeel(inst)
+    local evil = inst.components.container:FindItems(function(item)
+        if item.prefab == "petals_evil" then
+            return true
+        end
+    end)
+
+    local blossom = inst.components.container:FindItems(function(item)
+        if item.prefab == "moon_tree_blossom" then
+            return true
+        end
+    end)
+
+    local petals = inst.components.container:FindItems(function(item)
+        if item.prefab == "petals" then
+            return true
+        end
+    end)
+
+    if #evil > 3 then
+        return "EVIL", "sisturn_evil_petal_fx"
+    elseif #blossom > 3 then
+        return "BLOSSOM", "sisturn_moon_petal_fx"
+    elseif #petals > 3 then
+        return "PETALS", "sisturn_normal_petal_fx"
+    else
+        return "NORMAL"
+    end
+end
+
+local function update_sanityaura(inst)
+    if IsFullOfFlowers(inst) then
+        if not inst.components.sanityaura then
+            inst:AddComponent("sanityaura")
+        end
+    elseif inst.components.sanityaura ~= nil then
+        inst:RemoveComponent("sanityaura")
+    end
+end
+
+local function update_abigail_status(inst)
+    local is_full = IsFullOfFlowers(inst)
+
+    if is_full then
+        TheWorld:PushEvent("moon_blossom_sisturn",{ status = true })
+
+        local state, petal_fx = inst:getsisturnfeel()
+        if not inst.lune_fx and petal_fx then
+            inst.lune_fx = SpawnPrefab(petal_fx)
+            inst:AddChild(inst.lune_fx)
+        elseif inst.lune_fx then
+            inst.lune_fx.done = nil
+            if inst.lune_fx.AnimState:IsCurrentAnimation("lunar_fx_pst") then
+                inst.lune_fx.SoundEmitter:KillSound("loop")
+                inst.lune_fx.SoundEmitter:PlaySound("meta5/wendy/sisturn_moonblossom_LP","loop")
+                inst.lune_fx.AnimState:PlayAnimation("lunar_fx_pre")
+                inst.lune_fx.AnimState:PushAnimation("lunar_fx_loop")
+            end
+        end
+    else
+        TheWorld:PushEvent("moon_blossom_sisturn",{ status = nil })
+        if inst.lune_fx then
+            inst.lune_fx.done = true
+        end
+    end
+ end
+
 local function OnFlowerPerished(item)
     item.components.perishable.onperishreplacement = "ghostflower"
 end
@@ -95,8 +162,13 @@ AddPrefabPostInit("sisturn", function(inst)
         inst:AddComponent("timer")
     end
 
-    -- inst.getsisturnfeel = getsisturnfeel
-    -- UpvalueUtil.SetUpvalue(inst.components.inspectable.getstatus, getsisturnfeel, "getsisturnfeel")
+    inst.getsisturnfeel = getsisturnfeel
+    UpvalueUtil.SetUpvalue(inst.components.inspectable.getstatus, getsisturnfeel, "getsisturnfeel")
+
+    local remove_decor = inst:GetEventCallbacks("itemlose", inst, "scripts/prefabs/sisturn.lua")
+
+    UpvalueUtil.SetUpvalue(remove_decor, update_sanityaura, "update_sanityaura")
+    UpvalueUtil.SetUpvalue(remove_decor, update_abigail_status, "update_abigail_status")
 
     inst:ListenForEvent("itemget", OnItemGet)
     inst:ListenForEvent("itemlose", OnItemLose)

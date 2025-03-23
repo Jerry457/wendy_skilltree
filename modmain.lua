@@ -1,8 +1,10 @@
-Assets = {}
+Assets = {
+}
 
 PrefabFiles = {
     "dark_butterfly",
     "mourningflower",
+    "sisturn_petal_fx"
 }
 
 modimport("main/constants")
