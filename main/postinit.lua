@@ -8,6 +8,8 @@ local component_files = {
 }
 
 local stategraphs_files = {
+    "wilson",
+    "wilson_client"
 }
 
 local prefab_files = {

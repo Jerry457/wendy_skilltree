@@ -9,7 +9,8 @@ local UpvalueUtil = require("utils/upvalue_util")
 if not rawget(_G, "HotReloading") then
     local ACTIONS = {
         SPAEN_SMALL_GHOST = Action({priority = 1, rmb = true}),
-        MOURNING_REGROW = Action({priority = 1}),
+        MOURNING_REGROW = Action({priority = 1, rmb = true}),
+        USE_GHOSTLYELIXIR = Action({priority = 1, rmb = true}),
     }
 
     for name, action in pairs(ACTIONS) do
@@ -21,6 +22,7 @@ if not rawget(_G, "HotReloading") then
     local actionhandlers = {
         ActionHandler(ACTIONS.SPAEN_SMALL_GHOST, "dolongaction"),
         ActionHandler(ACTIONS.MOURNING_REGROW, "give"),
+        ActionHandler(ACTIONS.USE_GHOSTLYELIXIR, "applyelixir_mourningflower"),
     }
     for _, actionhandler in ipairs(actionhandlers) do
         AddStategraphActionHandler("wilson", actionhandler)
@@ -54,6 +56,11 @@ ACTIONS.MOURNING_REGROW.fn = function(act)
     end
 end
 
+ACTIONS.USE_GHOSTLYELIXIR.fn = function(act)
+    if act.invobject and act.invobject.components.ghostlyelixir then
+        return act.invobject.components.ghostlyelixir:Apply(act.doer, act.doer)
+    end
+end
 
 AddComponentAction("SCENE", "gravediggable", function(inst, doer, actions, right)
     local skilltreeupdater = (doer and doer.components.skilltreeupdater) or nil
@@ -65,8 +72,15 @@ end)
 
 AddComponentAction("USEITEM", "mourningflower", function(inst, doer, target, actions, right)
     local skilltreeupdater = (doer and doer.components.skilltreeupdater) or nil
-    if skilltreeupdater and skilltreeupdater:IsActivated("wendy_ghostflower_butterfly") then
+    if right and skilltreeupdater and skilltreeupdater:IsActivated("wendy_ghostflower_butterfly") then
         table.insert(actions, ACTIONS.MOURNING_REGROW)
+    end
+end)
+
+AddComponentAction("USEITEM", "ghostlyelixir", function(inst, doer, target, actions, right)
+    local skilltreeupdater = (doer and doer.components.skilltreeupdater) or nil
+    if right and skilltreeupdater and skilltreeupdater:IsActivated("wendy_ghostflower_hat") and target and target:HasTag("mourningflower") and right then
+        table.insert(actions, ACTIONS.USE_GHOSTLYELIXIR)
     end
 end)
 
