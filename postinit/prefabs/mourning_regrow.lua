@@ -73,7 +73,7 @@ AddPrefabPostInit("fruitflyfruit", function(inst)
         elseif TheSim:FindFirstEntityWithTag("friendlyfruitfly") then
             return false, "alady cxczcxzczxc"
         end
-        return OnRegrow("fruitflyfruit")
+        return OnRegrow("fruitflyfruit")(inst, doer)
     end)
 end)
 
