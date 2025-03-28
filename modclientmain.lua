@@ -4,7 +4,7 @@ Assets = {
 }
 
 PrefabFiles = {
-    "gk_skins",
+    "ws_skins",
 }
 
 modimport("main/glassic_api_loader")
@@ -14,4 +14,4 @@ modimport("main/tuning")
 modimport("main/strings")
 modimport("main/prefab_skins")
 
-GlassicAPI.RegisterItemAtlas("gk_inventoryimages", Assets)
+GlassicAPI.RegisterItemAtlas("ws_inventoryimages", Assets)
